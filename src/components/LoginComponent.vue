@@ -2,10 +2,10 @@
 <template>
   <h1>Аутентификация</h1>
   <form @submit=useApiController>
-    <input v-model="email" placeholder="Введите имя">
+    <input v-model="username" placeholder="Введите имя">
     <input v-model="password" placeholder="Введите пароль">
     <input type="submit" value="Подтвердить"/>
-    <div>{{this.loginElements.emailUser}}</div>
+    <div>{{this.loginElements.nameUser}}</div>
   </form>
 </template>
 
@@ -15,15 +15,15 @@ export default {
   name: "LoginComponent",
   data() { //объект data необходим для задания переменных
     return {
-      email: "",
+      username: "",
       password: "",
-      loginElements: [{emailUser: this.email}, {passwordUser: this.password}]
+      loginElements: [{nameUser: this.username}, {passwordUser: this.password}]
     }
   },
   watch: {
-    email: function (newEmail) {
-      if (newEmail != null) {
-        this.loginElements.emailUser = newEmail; //если поймает новое значение, добавит его в массив
+    username: function (newUsername) {
+      if (newUsername != null) {
+        this.loginElements.nameUser = newUsername; //если поймает новое значение, добавит его в массив
       }
     }, //более длинная реализация watch
     password(newPassword) {
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     useApiController(e) {
-      this.loginElements.push(this.email)
+      this.loginElements.push(this.username)
       localStorage.methods.loginUser(e, this.loginElements)
     }
   }

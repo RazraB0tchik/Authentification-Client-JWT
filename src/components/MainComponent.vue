@@ -16,9 +16,11 @@ export default {
       usersInfo: []
     }
   },
+  // rs(e).then((data) => this.usersInfo = data)
   methods: {
     getUsers(e){
-      localStorageController.methods.getUsers(e).then((data) => this.usersInfo = data); //обрабатываем promise и помещаем в дата
+      // localStorageController.methods.getUsers(e).then(data=>{console.log(data.data)})
+     localStorageController.methods.getUsers(e).then((response) => this.usersInfo=response.data); //обрабатываем promise и помещаем в дата
     }
   }
 }
