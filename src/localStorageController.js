@@ -1,8 +1,8 @@
 // import axios from "axios";
 
-// import axios from "axios";
+import axios from "axios";
 
-import api from "./api"
+import api from './api'
 export default {
     data() {
         return {
@@ -17,7 +17,7 @@ export default {
 
     methods: {
 
-        async loginUser(e, elementsUserLogin = []) {
+       async loginUser(e, elementsUserLogin = []) {
             e.preventDefault()
             try {
                 let response = await fetch("http://localhost:3500/auth/api/login", //при помощи await мы дожидаемся выполнения блока, пока не выполнится, дальше не пойдет
@@ -38,15 +38,15 @@ export default {
                 localStorage.user = this.mapUser.username;
                 localStorage.tokenUser = this.mapUser.tokenLogin; //записываем в localhost данные
                 localStorage.roleUser = this.mapUser.role;
-            } catch (errore) {
-                console.log(errore)
+            } catch (error) {
+                console.log(error)
             }
         },
 
-        async registrateUser(e, elementsRegistration = []) {
+         async registrateUser(e, elementsRegistration = []) {
             e.preventDefault()
             try {
-                let response = await fetch("http://localhost:3500/reg/registrationUser", {
+                let response = fetch("http://localhost:3500/reg/registrationUser", {
                     method: "POST",
                     mode: "cors",
                     credentials: "same-origin",
@@ -59,7 +59,7 @@ export default {
                         "email": elementsRegistration.emailUser
                     })
                 });
-                let userInfo = await response.json(); //только для асинхрон функций (видимо функции должны быть асинхронными, чтобы vue мог спокойно вытащить json ответ)
+                let userInfo = response.json(); //только для асинхрон функций (видимо функции должны быть асинхронными, чтобы vue мог спокойно вытащить json ответ)
                 this.mapUser = userInfo;
                 localStorage.user = this.mapUser.username;
                 localStorage.tokenUser = this.mapUser.tokenRegistered;
@@ -71,37 +71,33 @@ export default {
 
 
         async getUsers(e) {
-            e.preventDefault();
-            return api.method.getInformation().then((response) => {return response});
+            e.preventDefault()
+            return await api.method.getInformation();
         },
 
 
         async updateAccess() {
-            // eslint-disable-next-line no-empty
-            let response = await fetch("http://localhost:3500/update/getAccess", {
-                mode: "cors",
-                method: "POST",
-                credentials: "same-origin",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "username": localStorage.user,
-                    "role": localStorage.userRole,
-                })
-            });
-
-            let newToken = await response.json();
-            this.mapUser = newToken;
-            localStorage.user = this.mapUser.username;
-            localStorage.tokenUser = this.mapUser.tokenUpdate;
-            localStorage.roleUser = this.mapUser.role;
+            await axios.post("http://localhost:3500/update/getAccess", {
+                           "username": localStorage.user,
+                           "role": localStorage.roleUser,
+           },
+               {
+                   mode: "cors",
+                   credentials: "same-origin",
+                   headers: {
+                       'Content-Type': 'application/json'
+                   }
+           })
+               .then(response => {
+                   this.mapUser = response.data;
+                           localStorage.user = this.mapUser.username;
+                           localStorage.tokenUser = this.mapUser.tokenUpdate;
+                           localStorage.roleUser = this.mapUser.role;
+               })
 
         },
     }
 }
-
-
 
 
 

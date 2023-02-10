@@ -20,6 +20,7 @@ export default {
   methods: {
     getUsers(e){
       // localStorageController.methods.getUsers(e).then(data=>{console.log(data.data)})
+      console.log( localStorageController.methods.getUsers(e).then((response) => this.usersInfo=response.data));
      localStorageController.methods.getUsers(e).then((response) => this.usersInfo=response.data); //обрабатываем promise и помещаем в дата
     }
   }
